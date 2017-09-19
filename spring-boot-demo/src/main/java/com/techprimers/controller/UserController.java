@@ -19,20 +19,35 @@ public class UserController {
 	@Autowired
 	private UserService userService;
 
-    @GetMapping(value = "/all")
-    public List<User> findAll() {
-        return userService.findAll();
+    @GetMapping("/all")
+    public List<User> getAll() {
+        return userService.getAll();
     }
 
-    @GetMapping(value = "/get/{name}")
-    public User findByAlumno(@PathVariable final String name){
-        return userService.findByAlumno(name);
+    @GetMapping("/get/{name}")
+    public User findByName(@PathVariable String name){
+        return userService.findByName(name);
     }
 
     @PostMapping(value = "/save",
     produces = { MediaType.APPLICATION_JSON_VALUE, MediaType.APPLICATION_XML_VALUE })
-    public void save(@RequestBody final User user) {
-    	userService.save(user);
-        
+    public void saveUpdate(@RequestBody User user) {
+    	userService.saveUpdate(user);  
+    }
+    
+    @PutMapping(value = "/update")
+    public void putMethod(@RequestBody User user) {
+    	User existingEmp = userService.getById(user.getIdalumno());
+		if (existingEmp == null) {
+			System.out.println("Employee with id " + user.getIdalumno() + " does not exists");
+			
+		} else {
+			userService.saveUpdate(user);
+		}
+    }
+    
+    @DeleteMapping(value = "/delete/{userId}")
+    public void delete(@PathVariable int userId) {
+    	//userService.delete(userId);  
     }
 }
